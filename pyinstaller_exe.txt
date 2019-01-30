@@ -1,0 +1,4 @@
+pyinstaller -F E:/Python_Study/project/MyGame/pygame_shooting/main.py E:/Python_Study/project/MyGame/pygame_shooting/src/plane.py E:/Python_Study/project/MyGame/pygame_shooting/src/textAndbutton.py
+
+
+注：不需要加-p，按照上面的命令敲即可，多个文件中间用空格隔开

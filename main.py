@@ -1,13 +1,22 @@
 import pygame
-import time
+#import time
+import sys
 
-from plane import MyPlane
+import plane
+
+#from plane import MyPlane
+from textAndbutton import Mytext, white
+
+window_width = 480
+window_height = 680
+
 
 def key_control(hero_temp):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             print('exit')
-            exit()
+            pygame.quit()
+            sys.exit()
     
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
@@ -20,34 +29,34 @@ def key_control(hero_temp):
         hero_temp.move_down()
 
 def start_game_info():
-    pygame.init()
-    
-    screen = pygame.display.set_mode((480, 680), 0, 32)
-    backgroud = pygame.image.load('picture/background.png')
-    #myplane = pygame.image.load('picture/hero.gif')
+    screen = pygame.display.set_mode((window_width, window_height), 0, 32)
+    backgroud = pygame.image.load('picture/bg.png')
+    text_welcome = Mytext("Welcome", window_width/2, window_height/3, color = white)
     
     game_info = True
     
     while game_info:
         screen.blit(backgroud, (0, 0))
-        #screen.blit(myplane, (190, 520))
+        text_welcome.draw_text(screen)
+        
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 print('exit')
-                exit()
+                pygame.quit()
             elif event.type == pygame.KEYDOWN :
                 if event.key == pygame.K_SPACE :
                     game_info = False
                     print(game_info)
                     break
-        #key_control()
-        time.sleep(0.01)
+ 
+
     
 def game_loop():
+    clock = pygame.time.Clock()
     screen = pygame.display.set_mode((480, 680), 0, 32)
     background = pygame.image.load('picture/background.png')
-    myplane = MyPlane(screen)
+    myplane = plane.MyPlane(screen)
     game_on = True
     
     while game_on :
@@ -56,13 +65,14 @@ def game_loop():
         key_control(myplane)
         myplane.display()
         
-        
         pygame.display.update()
-        #time.sleep(0.1)
+        #time.sleep(0.01)
+        clock.tick(60)
                
 
 def main():
     pygame.init()
+    pygame.mixer.init()
     start_game_info()
     game_loop()
 
