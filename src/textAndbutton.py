@@ -1,5 +1,4 @@
 import pygame
-import sys
 
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -28,5 +27,13 @@ class Mytext(object):
         text_rect = text_surf.get_rect()
         text_rect.center = self.pos
         screen.blit(text_surf, text_rect)
-        
 
+class MyRect(object):
+    def __init__(self, color = red, x = 0, y = 0, width = 10, height = 10):      
+        self.color = color
+        self.rect = (x, y, width, height)
+        
+        
+    def draw_button(self, screen):
+        pygame.draw.rect(screen, self.color, self.rect)    
+        
