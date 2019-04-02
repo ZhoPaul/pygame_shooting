@@ -1,4 +1,4 @@
-import pygame
+#import pygame
 #import time
 import sys
 
@@ -83,8 +83,6 @@ def start_game_info():
                     game_info = False
                     print(game_info)
                     break
- 
-
     
 def game_loop():
     clock = pygame.time.Clock()
@@ -93,7 +91,7 @@ def game_loop():
     myplane = plane.MyPlane(screen)
     game_on = True
     
-    while game_on :
+    while game_on:
         screen.blit(background, (0, 0))
         
         key_control(myplane)
@@ -102,7 +100,6 @@ def game_loop():
         pygame.display.update()
         #time.sleep(0.01)
         clock.tick(60)
-               
 
 def main():
     pygame.init()
@@ -110,7 +107,7 @@ def main():
     start_game_info()
     game_loop()
 
-if __name__ =="__main__":
+if __name__ == "__main__":
     main()
     
     

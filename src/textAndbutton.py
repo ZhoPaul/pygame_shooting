@@ -33,7 +33,6 @@ class MyRect(object):
         self.color = color
         self.rect = (x, y, width, height)
         
-        
     def draw_button(self, screen):
         pygame.draw.rect(screen, self.color, self.rect)    
         
