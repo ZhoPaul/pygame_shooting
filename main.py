@@ -9,14 +9,19 @@ from textAndbutton import *
 
 window_width = 480
 window_height = 680
-
+BULLETEVENT = pygame.USEREVENT +1
+pygame.time.set_timer(BULLETEVENT, 250)
 
 def key_control(hero_temp):
     for event in pygame.event.get():
+        #print('key_control event type', event.type)
         if event.type == pygame.QUIT:
-            print('exit')
+            print('key control exit')
             pygame.quit()
             sys.exit()
+        elif event.type == BULLETEVENT:
+            hero_temp.fire() # fire bullet by timer per 250ms
+            # print('key_control')
     
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
@@ -76,7 +81,7 @@ def start_game_info():
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                print('exit')
+                print('game info exit')
                 pygame.quit()
             elif event.type == pygame.KEYDOWN :
                 if event.key == pygame.K_SPACE :
@@ -93,8 +98,18 @@ def game_loop():
     
     while game_on:
         screen.blit(background, (0, 0))
-        
+        '''
+        for event in pygame.event.get():
+            if event.type == BULLETEVENT:
+                myplane.fire()
+            elif event.type == pygame.QUIT:
+                print('game on exit')
+                pygame.quit()
+                sys.exit()
+        '''
         key_control(myplane)
+        #print("tick is %d", pygame.time.get_ticks())
+        
         myplane.display()
         
         pygame.display.update()
