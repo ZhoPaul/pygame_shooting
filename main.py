@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
+
 #import pygame
 #import time
 import sys
+import random
 
 import plane
 
@@ -90,11 +93,15 @@ def start_game_info():
                     break
     
 def game_loop():
+    game_on = True
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((480, 680), 0, 32)
     background = pygame.image.load('picture/background.png')
     myplane = plane.MyPlane(screen)
-    game_on = True
+    
+    # 绘制障碍物
+    enemy = plane.Enemy(screen)
+    y = 0
     
     while game_on:
         screen.blit(background, (0, 0))
@@ -111,10 +118,17 @@ def game_loop():
         #print("tick is %d", pygame.time.get_ticks())
         
         myplane.display()
+        enemy.display()
+        if y>=0:
+            y=y-5
+        else :
+            y = 680
+        
+        #pygame.draw.rect(screen, random.choice(mycolor), (random.randint(0,480), y,60,50))
+        
         
         pygame.display.update()
-        #time.sleep(0.01)
-        clock.tick(60)
+        clock.tick(60) # 控制游戏运行帧率，没秒60帧
 
 def main():
     pygame.init()

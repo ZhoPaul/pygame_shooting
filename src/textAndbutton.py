@@ -1,4 +1,5 @@
 import pygame
+#from pip._vendor.pyparsing import White
 
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -9,6 +10,8 @@ blue = (0, 100, 255)
 bright_green = (0, 255, 0)
 bright_red = (255, 0, 0)
 bright_blue = (0, 0, 255)
+
+mycolor = [black, white, red, green, blue]
 
 class Mytext(object):
     def __init__(self, info = "hello", pos_x = 0, pos_y = 0, height = 30, color = black, font = 'comicsansms'):
