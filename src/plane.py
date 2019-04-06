@@ -4,6 +4,9 @@ import random
 
 from textAndbutton import mycolor
 
+BULLETEVENT = pygame.USEREVENT +1
+pygame.time.set_timer(BULLETEVENT, 300)
+
 class MyPlane(object):
     def __init__(self, screen):
         self.width = 100
@@ -18,6 +21,9 @@ class MyPlane(object):
         self.bullet_list = []
         
     def display(self):
+        if pygame.event.get(BULLETEVENT):
+            self.fire()
+
         # 显示子弹
         for bullet in self.bullet_list:
             #print('bullet.pos_y is %d', bullet.pos_y)
@@ -27,7 +33,6 @@ class MyPlane(object):
                 continue
             bullet.display()
         # 显示飞机
-        #self.screen.blit(self.image, (self.pos_x, self.pos_y))
         self.screen.blit(self.image, (self.rect.x, self.rect.y))
         
     def move_left(self):
@@ -48,7 +53,7 @@ class MyPlane(object):
     
     def fire(self):
         #print('BULLETEVENT')
-        if self.bulletNum < 5:
+        if self.bulletNum < 6:
             temp_bullet = Bullet(self.screen, self.rect.x, self.rect.y)
             self.bullet_list.append(temp_bullet)
             self.bulletNum = self.bulletNum+1
@@ -59,18 +64,19 @@ class Bullet(object):
         self.image = pygame.image.load('picture/bullet_1.gif')
         self.screen = screen
         self.rect = self.image.get_rect()
-        self.rect.x = pos_x
+        self.rect.x = pos_x+48
         self.rect.y = pos_y
-        self.speed = 6
+        self.speed = 10
 
     def display(self):
         if self.rect.y >= 0:
             self.rect.y = self.rect.y - self.speed
         
-        self.screen.blit(self.image, (self.rect.x+48, self.rect.y))
+        self.screen.blit(self.image, (self.rect.x, self.rect.y))
             
 class Block(object):
-    def __init__(self, screen, pos_x=random.randint(0, 450), pos_y=0):
+    #def __init__(self, screen, pos_x=random.randint(0, 450), pos_y=0):
+    def __init__(self, screen, pos_x=100, pos_y=0):
         self.screen = screen
         self.pos_x = pos_x
         self.pos_y = pos_y
@@ -86,7 +92,8 @@ class Block(object):
             self.rect.y = self.rect.y + self.speed
         else:
             self.rect.y = 0
-            self.rect.x = random.randint(0, 450)
+            #self.rect.x = random.randint(0, 450)
+            self.rect.x = 100
             self.color = random.choice(mycolor)
         #tmprect = (self.pos_x, self.pos_y, self.width, self.height)
         pygame.draw.rect(self.screen, self.color, self.rect)
