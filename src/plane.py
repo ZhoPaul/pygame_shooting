@@ -1,3 +1,4 @@
+# coding: utf-8
 import pygame
 import random
 #import textAndbutton
@@ -18,7 +19,6 @@ class MyPlane(object):
         self.bullet_list = []
         
     def display(self):
-        # 显示子弹
         for bullet in self.bullet_list:
             #print('bullet.pos_y is %d', bullet.pos_y)
             if bullet.rect.y < 0:
@@ -26,7 +26,6 @@ class MyPlane(object):
                 self.bulletNum = self.bulletNum-1
                 continue
             bullet.display()
-        # 显示飞机
         self.screen.blit(self.image, (self.rect.x, self.rect.y))
         
     def move_left(self):
@@ -69,7 +68,7 @@ class Bullet(object):
         self.screen.blit(self.image, (self.rect.x, self.rect.y))
             
 class Block(object):
-    def __init__(self, screen, pos_x=random.randint(0, 450), pos_y=0):
+    def __init__(self, screen, pos_x=random.randint(0, 420), pos_y=0):
     #def __init__(self, screen, pos_x=100, pos_y=0):
         self.screen = screen
         self.pos_x = pos_x
@@ -86,12 +85,11 @@ class Block(object):
             self.rect.y = self.rect.y + self.speed
         else:
             self.rect.y = 0
-            self.rect.x = random.randint(0, 450)
+            self.rect.x = random.randint(0, 420)
             #self.rect.x = 100
             self.color = random.choice(mycolor)
         #tmprect = (self.pos_x, self.pos_y, self.width, self.height)
         pygame.draw.rect(self.screen, self.color, self.rect)
         
-        #显示彩色的砖块
         #pygame.draw.rect(self.screen, random.choice(mycolor), tmprect)
         #clock.tick(60)

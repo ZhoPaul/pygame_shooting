@@ -1,3 +1,4 @@
+# coding: utf-8
 import pygame
 #from pip._vendor.pyparsing import White
 
