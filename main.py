@@ -13,8 +13,10 @@ from textAndbutton import *
 window_width = 480
 window_height = 680
 
-def key_control(hero_temp):
+BULLETEVENT = pygame.USEREVENT +1
+pygame.time.set_timer(BULLETEVENT, 300)
 
+def key_control(hero_temp, screen):
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
         hero_temp.move_left()
@@ -24,11 +26,34 @@ def key_control(hero_temp):
         hero_temp.move_up()
     elif keys[pygame.K_DOWN]:
         hero_temp.move_down()
-        
+
+    """
+    eventlist = pygame.event.get(pygame.QUIT)
+    print(eventlist)
+    """
+    #pygame.event.clear(pygame.QUIT)
+    #pygame.event.clear(BULLETEVENT)
+    for event in pygame.event.get():
+        if pygame.QUIT == event.type:
+            print('key control exit')
+            pygame.quit()
+            sys.exit()
+        if BULLETEVENT == event.type:
+            hero_temp.fire()
+        if pygame.KEYDOWN == event.type:
+            if pygame.K_SPACE == event.key:
+                check_pause(screen)
+
+    """
     if pygame.event.get(pygame.QUIT):
         print('key control exit')
         pygame.quit()
         sys.exit()
+    if pygame.event.get(BULLETEVENT):
+        pygame.event.clear()
+        #print('BULLETEVENT')
+        hero_temp.fire()
+        """
 
 def button_control(screen):
     # draw start button and exit button
@@ -59,36 +84,31 @@ def button_control(screen):
     start_text.draw_text(screen)
     exit_text.draw_text(screen)
 
-def check_collide(plane_Tmp, block_Tmp):
+def check_collide(plane_Tmp, block_Tmp, screen):
     if plane_Tmp.rect.colliderect(block_Tmp.rect):
-        #print('collide')
-        return True
-    return False
-    '''
-    if (block_Tmp.pos_y>=plane_Tmp.pos_y and block_Tmp.pos_y <=plane_Tmp.pos_y + plane_Tmp.height)\
-        or (block_Tmp.pos_y+block_Tmp.height>=plane_Tmp.pos_y and block_Tmp.pos_y+block_Tmp.height <=plane_Tmp.pos_y + plane_Tmp.height):
-        if (block_Tmp.pos_x>=plane_Tmp.pos_x and block_Tmp.pos_x <=plane_Tmp.pos_x + plane_Tmp.width)\
-            or (block_Tmp.pos_x+block_Tmp.width>=plane_Tmp.pos_x and block_Tmp.pos_x+block_Tmp.width <=plane_Tmp.pos_y + plane_Tmp.width):
-            print('collide')
-            return True
-    #print('Not collide')
-    return False
-    '''
+        crash_text = Mytext("You Crashed", window_width/2, window_height/3, height = 50, color = black)
+        crash_text.draw_text(screen)
+        pygame.display.update()
+        while True:
+            if pygame.key.get_pressed()[pygame.K_SPACE]:
+                return False
+            if pygame.event.get(pygame.QUIT):
+                print('crashed game exit')
+                break
+        pygame.quit()
+        sys.exit()
+        return False 
+    return True    
+
 def check_shoot(myplane, block):
     shootblock = False
     for bullet in myplane.bullet_list:
         #print('block is not shooted')
         #print(myplane.bulletNum, bullet.rect)
         #print(block.rect)
-        
         if block.rect.colliderect(bullet.rect):
-            '''
-            print('block is shooted')
-            print(myplane.bulletNum, bullet.rect)
-            print(block.rect)
-            '''
             shootblock = True
-            block.rect.x=random.randint(0,450)
+            block.rect.x=random.randint(0, 450)
             block.rect.y=0
             block.color = random.choice(mycolor)
             myplane.bullet_list.remove(bullet)
@@ -97,7 +117,6 @@ def check_shoot(myplane, block):
             #print(x)
             #print('block is shooted')
             return True
-            #break
         #print(myplane.bulletNum, bullet.rect)
         #print('block rect is:', block.rect)
             
@@ -105,7 +124,31 @@ def check_shoot(myplane, block):
         block.display()
         return False
 
-
+def check_pause(screen):
+    #if pygame.key.get_pressed()[pygame.K_SPACE]:
+    pause_text = Mytext("Pause", window_width/2, window_height/3, height = 50, color = black)
+    pause_text.draw_text(screen)
+    pygame.display.update()
+    pygame.time.wait(500)
+    while True:
+        #print(pause)
+        for event in pygame.event.get():
+            if pygame.QUIT == event.type:
+                print('pause exit')
+                pygame.quit()
+                sys.exit()
+            if pygame.KEYDOWN == event.type:
+                if pygame.K_SPACE == event.key:
+                    #game_pause = False
+                    return
+        """if pygame.key.get_pressed()[pygame.K_SPACE]:
+            pygame.time.wait(500)
+            return
+        if pygame.event.get(pygame.QUIT):
+            print('crashed game exit')
+            break"""
+    """pygame.quit()
+    sys.exit()"""
 
 def start_game_info():
     screen = pygame.display.set_mode((window_width, window_height), 0, 32)
@@ -144,73 +187,27 @@ def game_loop():
     block = plane.Block(screen)
     #绘制记分牌
     x=0
-    point = Mytext("POINT: "+ str(x), 70, 25, height = 30, color = black)
-    #pointer = Mytext(str(x), 100, 25, height = 30, color = black)
-    #point.draw_text(screen)
-
+    pointer = Mytext("POINT: "+ str(x), 70, 25, height = 30, color = black)
     while game_on:
-        screen.blit(background, (0, 0))
-        point.draw_text(screen)
-        #pointer.draw_text(screen)
-        key_control(myplane)
         #print("tick is %d", pygame.time.get_ticks())
+        screen.blit(background, (0, 0))
+        pointer.draw_text(screen)
+        key_control(myplane, screen)
 
-        '''
-        shootblock = False
-        for bullet in myplane.bullet_list:
-            print('block is not shooted')
-            print(myplane.bulletNum, bullet.rect)
-            print(block.rect)
-            
-            if block.rect.colliderect(bullet.rect):
-                
-                print('block is shooted')
-                print(myplane.bulletNum, bullet.rect)
-                print(block.rect)
-                
-                shootblock = True
-                block.rect.x=random.randint(0,450)
-                block.rect.y=0
-                myplane.bullet_list.remove(bullet)
-                myplane.bulletNum = myplane.bulletNum-1
-                break
-            #print(myplane.bulletNum, bullet.rect)
-            #print('block rect is:', block.rect)
-                
-        if False==shootblock:
-            block.display()
-        '''
         myplane.display()
+        # 检测子弹是否击中目标
         if check_shoot(myplane, block):
             x=x+1
-            point.info = 'POINT:'+str(x)
+            pointer.info = 'POINT:'+str(x)
         #print(x)
         #block.display()
         #pygame.draw.rect(screen, random.choice(mycolor), (random.randint(0,480), y,60,50))
+        #print(myplane.bulletNum)
+        
+        # 检测玩家是否被撞击
+        game_on = check_collide(myplane, block, screen)
 
-
-        '''
-        if check_collide(myplane, block):
-            crash_text = Mytext("You Crashed", window_width/2, window_height/3, height = 50, color = black)
-            crash_text.draw_text(screen)
-        '''
-        crashed = check_collide(myplane, block)
-        if True == crashed:
-            crash_text = Mytext("You Crashed", window_width/2, window_height/3, height = 50, color = black)
-            crash_text.draw_text(screen)
-            pygame.display.update()
-        while True == crashed:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    print('crashed game exit')
-                    game_on = False
-                    pygame.quit()
-                elif event.type == pygame.KEYDOWN :
-                    if event.key == pygame.K_SPACE :
-                        crashed = False
-                        game_on = False
-                        break 
-                  
+        #check_pause(screen)
         pygame.display.update()
         #print(clock.get_time())
         clock.tick(60) # 控制游戏运行帧率，每秒60帧

@@ -4,9 +4,6 @@ import random
 
 from textAndbutton import mycolor
 
-BULLETEVENT = pygame.USEREVENT +1
-pygame.time.set_timer(BULLETEVENT, 300)
-
 class MyPlane(object):
     def __init__(self, screen):
         self.width = 100
@@ -21,9 +18,6 @@ class MyPlane(object):
         self.bullet_list = []
         
     def display(self):
-        if pygame.event.get(BULLETEVENT):
-            self.fire()
-
         # 显示子弹
         for bullet in self.bullet_list:
             #print('bullet.pos_y is %d', bullet.pos_y)
@@ -75,8 +69,8 @@ class Bullet(object):
         self.screen.blit(self.image, (self.rect.x, self.rect.y))
             
 class Block(object):
-    #def __init__(self, screen, pos_x=random.randint(0, 450), pos_y=0):
-    def __init__(self, screen, pos_x=100, pos_y=0):
+    def __init__(self, screen, pos_x=random.randint(0, 450), pos_y=0):
+    #def __init__(self, screen, pos_x=100, pos_y=0):
         self.screen = screen
         self.pos_x = pos_x
         self.pos_y = pos_y
@@ -92,8 +86,8 @@ class Block(object):
             self.rect.y = self.rect.y + self.speed
         else:
             self.rect.y = 0
-            #self.rect.x = random.randint(0, 450)
-            self.rect.x = 100
+            self.rect.x = random.randint(0, 450)
+            #self.rect.x = 100
             self.color = random.choice(mycolor)
         #tmprect = (self.pos_x, self.pos_y, self.width, self.height)
         pygame.draw.rect(self.screen, self.color, self.rect)
@@ -101,6 +95,3 @@ class Block(object):
         #显示彩色的砖块
         #pygame.draw.rect(self.screen, random.choice(mycolor), tmprect)
         #clock.tick(60)
-    
-    
-    
